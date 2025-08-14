@@ -85,15 +85,14 @@ def get_struttura_info(property_name: str):
     match = anagrafica[anagrafica[col_name] == property_name]
     return match.iloc[0].to_dict() if not match.empty else {}
 
-def query_kb(property_name: str, message: str):
-    col_name = next((c for c in kb.columns if "appartamento" in c.lower() and "stanza" in c.lower()), None)
-    if not col_name:
-        print("[ERRORE]: Nessuna colonna appartamento/stanza trovata in KB")
-        return None
-    filtered_kb = kb[kb[col_name].str.contains(property_name, na=False)]
+def query_kb(property_name: str, message: str) -> str | None:
+    filtered_kb = kb[kb["Appartamento /stanza"].str.contains(property_name, na=False)]
+
     for _, row in filtered_kb.iterrows():
-        if str(row["descrizione"]).lower() in message.lower():
-            return row["risposta"]
+        testo_faq = str(row.get("risposta", "")).lower()
+        if testo_faq and testo_faq in message.lower():
+            return str(row.get("risposta", ""))
+
     return None
 
 def ask_gpt(prompt: str):
@@ -209,8 +208,17 @@ async def whatsapp_style():
 
 @app.post("/test", response_class=HTMLResponse)
 async def test_form(phone: str = Form(...), message: str = Form(...)):
-    response = await handle_message(IncomingMessage(phone=phone, message=message))
-    reply = response.body.decode() if hasattr(response, 'body') else response
+    reply_raw = response.body.decode() if hasattr(response, 'body') else response
+
+try:
+    reply_data = json.loads(reply_raw) if isinstance(reply_raw, str) else reply_raw
+    bot_reply = reply_data["reply"] if isinstance(reply_data, dict) else str(reply_data)
+except Exception as e:
+    print("⚠️ Errore parsing risposta:", e)
+    bot_reply = str(reply_raw)
+
+session["messages"].append((message, bot_reply))
+
     session = get_session(phone)
 
     # aggiorna la sessione
