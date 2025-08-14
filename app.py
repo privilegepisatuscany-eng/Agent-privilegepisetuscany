@@ -86,7 +86,11 @@ def get_struttura_info(property_name: str):
     return match.iloc[0].to_dict() if not match.empty else {}
 
 def query_kb(property_name: str, message: str):
-    filtered_kb = kb[kb["Appartamento /stanza"].str.contains(property_name, na=False)]
+    col_name = next((c for c in kb.columns if "appartamento" in c.lower() and "stanza" in c.lower()), None)
+    if not col_name:
+        print("[ERRORE]: Nessuna colonna appartamento/stanza trovata in KB")
+        return None
+    filtered_kb = kb[kb[col_name].str.contains(property_name, na=False)]
     for _, row in filtered_kb.iterrows():
         if str(row["descrizione"]).lower() in message.lower():
             return row["risposta"]
@@ -110,45 +114,144 @@ def save_session(phone: str, session: dict):
 @app.get("/", response_class=HTMLResponse)
 async def whatsapp_style():
     return """
-    <html><head><title>Chat WhatsApp</title>
-    <style>
-    body { font-family: sans-serif; background: #e5ddd5; padding: 20px; }
-    .chat { max-width: 500px; margin: auto; background: #fff; border-radius: 10px; padding: 10px; display: flex; flex-direction: column; gap: 8px; }
-    .msg { margin: 5px 0; padding: 8px 12px; border-radius: 10px; max-width: 70%; }
-    .user { background: #dcf8c6; align-self: flex-end; text-align: right; }
-    .bot { background: #f1f0f0; align-self: flex-start; text-align: left; }
-    .bubble { display: flex; flex-direction: column; }
-    </style></head><body>
-    <div class='chat'>
-      <h3>Simula una chat WhatsApp</h3>
-      <form method='post' action='/test'>
-        <div><label>Telefono:</label><input name='phone' /></div>
-        <div><label>Messaggio:</label><input name='message' /></div>
-        <button>Invia</button>
-      </form>
-    </div></body></html>
+    <html>
+    <head>
+        <title>Chat WhatsApp</title>
+        <style>
+            body {
+                font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+                background-color: #e5ddd5;
+                margin: 0;
+                padding: 0;
+            }
+            .container {
+                display: flex;
+                flex-direction: column;
+                max-width: 600px;
+                margin: 20px auto;
+                height: 90vh;
+                border: 1px solid #ccc;
+                border-radius: 10px;
+                overflow: hidden;
+                background: #fff;
+            }
+            .header {
+                background-color: #075e54;
+                color: white;
+                padding: 16px;
+                font-weight: bold;
+            }
+            .chat {
+                flex: 1;
+                padding: 16px;
+                overflow-y: auto;
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+                background-color: #ece5dd;
+            }
+            .bubble {
+                padding: 10px 15px;
+                border-radius: 10px;
+                max-width: 75%;
+                line-height: 1.4;
+                word-wrap: break-word;
+            }
+            .user {
+                align-self: flex-end;
+                background-color: #dcf8c6;
+                text-align: right;
+            }
+            .bot {
+                align-self: flex-start;
+                background-color: #ffffff;
+                text-align: left;
+            }
+            .form {
+                display: flex;
+                gap: 10px;
+                padding: 10px;
+                background: #f0f0f0;
+                border-top: 1px solid #ccc;
+            }
+            input[type=text] {
+                flex: 1;
+                padding: 10px;
+                font-size: 16px;
+                border-radius: 5px;
+                border: 1px solid #ccc;
+            }
+            button {
+                padding: 10px 16px;
+                background: #075e54;
+                color: white;
+                border: none;
+                border-radius: 5px;
+                font-size: 16px;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <div class="header">💬 Concierge AI (Simulazione WhatsApp)</div>
+            <div class="chat">
+                <div class="bubble bot">Ciao! Inserisci il numero di telefono e inizia la conversazione.</div>
+            </div>
+            <form class="form" method="post" action="/test">
+                <input type="text" name="phone" placeholder="Telefono" required />
+                <input type="text" name="message" placeholder="Messaggio..." required />
+                <button type="submit">➤</button>
+            </form>
+        </div>
+    </body>
+    </html>
     """
 
-@app.post("/test")
+@app.post("/test", response_class=HTMLResponse)
 async def test_form(phone: str = Form(...), message: str = Form(...)):
     response = await handle_message(IncomingMessage(phone=phone, message=message))
     reply = response.body.decode() if hasattr(response, 'body') else response
-    history = get_session(phone)["messages"]
+    session = get_session(phone)
 
+    # aggiorna la sessione
+    session["messages"].append((message, reply["reply"]))
+    save_session(phone, session)
+
+    # genera le bolle della chat
     bubbles = "".join([
-        f"<div class='bubble user'><div class='msg user'>{m[0]}</div></div>" +
-        f"<div class='bubble bot'><div class='msg bot'>{m[1]}</div></div>"
-        for m in history
+        f"<div class='bubble user'>{m[0]}</div><div class='bubble bot'>{m[1]}</div>"
+        for m in session["messages"]
     ])
+
     return HTMLResponse(content=f"""
-        <html><body><div class='chat'>
-        {bubbles}
-        <form method='post' action='/test'>
-        <input type='hidden' name='phone' value='{phone}' />
-        <div><label>Messaggio:</label><input name='message' /></div>
-        <button>Invia</button>
-        </form>
-        <a href='/'>↩️ Nuova sessione</a></div></body></html>
+        <html>
+        <head>
+        <title>Chat WhatsApp</title>
+        <style>
+            body {{ font-family: sans-serif; background: #e5ddd5; margin: 0; padding: 0; }}
+            .container {{ max-width: 600px; margin: 20px auto; height: 90vh; display: flex; flex-direction: column; border-radius: 10px; overflow: hidden; background: white; }}
+            .header {{ background: #075e54; color: white; padding: 16px; font-weight: bold; }}
+            .chat {{ flex: 1; padding: 16px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; background: #ece5dd; }}
+            .bubble {{ padding: 10px 15px; border-radius: 10px; max-width: 75%; line-height: 1.4; }}
+            .user {{ align-self: flex-end; background: #dcf8c6; text-align: right; }}
+            .bot {{ align-self: flex-start; background: white; text-align: left; }}
+            .form {{ display: flex; gap: 10px; padding: 10px; background: #f0f0f0; border-top: 1px solid #ccc; }}
+            input[type=text] {{ flex: 1; padding: 10px; font-size: 16px; border-radius: 5px; border: 1px solid #ccc; }}
+            button {{ padding: 10px 16px; background: #075e54; color: white; border: none; border-radius: 5px; font-size: 16px; }}
+        </style>
+        </head>
+        <body>
+        <div class="container">
+            <div class="header">💬 Concierge AI (Simulazione WhatsApp)</div>
+            <div class="chat">{bubbles}</div>
+            <form class="form" method="post" action="/test">
+                <input type="hidden" name="phone" value="{phone}" />
+                <input type="text" name="message" placeholder="Messaggio..." required />
+                <button type="submit">➤</button>
+            </form>
+        </div>
+        </body>
+        </html>
     """)
 
 @app.post("/webhook")
