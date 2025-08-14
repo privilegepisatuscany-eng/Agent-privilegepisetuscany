@@ -8,6 +8,7 @@ import pandas as pd
 import requests
 import os
 import json
+import redis
 from datetime import datetime
 
 # Load Knowledge Base
@@ -21,10 +22,10 @@ CIAOBOOKING_API_BASE = "https://api.ciaobooking.com/api/public"
 CIAOBOOKING_EMAIL = os.getenv("CIAOBOOKING_EMAIL")
 CIAOBOOKING_PASSWORD = os.getenv("CIAOBOOKING_PASSWORD")
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
-openai.api_key = OPENAI_API_KEY
+REDIS_URL = os.getenv("REDIS_URL", "redis://localhost:6379")
 
-# Temporary in-memory session store
-SESSIONS = {}
+openai.api_key = OPENAI_API_KEY
+rdb = redis.Redis.from_url(REDIS_URL, decode_responses=True)
 
 # Prompt template
 AGENT_PROMPT = """
@@ -62,7 +63,7 @@ def get_reservations_by_client(client_id: int, token: str):
         params={"from": "2023-01-01", "to": "2026-01-01"}
     )
     all_res = res.json()["data"]["collection"]
-    return [r for r in all_res if r["client_id"] == client_id and r["status"] == 2]  # CONFIRMED
+    return [r for r in all_res if r["client_id"] == client_id and r["status"] == 2]
 
 def extract_property_context(reservations):
     if not reservations:
@@ -84,6 +85,14 @@ def ask_gpt(prompt: str):
     )
     return completion.choices[0].message.content
 
+def get_session(phone: str):
+    raw = rdb.get(phone)
+    return json.loads(raw) if raw else {"messages": []}
+
+def save_session(phone: str, session: dict):
+    session["last_seen"] = datetime.now().isoformat()
+    rdb.set(phone, json.dumps(session))
+
 # Web UI for testing
 @app.get("/", response_class=HTMLResponse)
 async def form():
@@ -102,7 +111,6 @@ async def form():
 async def test_form(phone: str = Form(...), message: str = Form(...)):
     return await handle_message(IncomingMessage(phone=phone, message=message))
 
-# Main handler
 @app.post("/webhook")
 async def handle_message(msg: IncomingMessage):
     try:
@@ -118,23 +126,18 @@ async def handle_message(msg: IncomingMessage):
         if not property_name:
             return JSONResponse({"reply": "Gentile ospite, non riesco a trovare una prenotazione attiva. Niccolò la ricontatterà al più presto."})
 
-        # Session management
-        session_key = msg.phone
-        session = SESSIONS.get(session_key, {"messages": []})
-        session["last_seen"] = datetime.now().isoformat()
+        session = get_session(msg.phone)
 
-        # Try Knowledge Base
         response = query_kb(property_name, msg.message)
         if response:
             session["messages"].append((msg.message, response))
-            SESSIONS[session_key] = session
+            save_session(msg.phone, session)
             return JSONResponse({"reply": response})
 
-        # GPT fallback
         enriched_prompt = f"Domanda del cliente: '{msg.message}'\nStruttura: {property_name}."
         fallback = ask_gpt(enriched_prompt)
         session["messages"].append((msg.message, fallback))
-        SESSIONS[session_key] = session
+        save_session(msg.phone, session)
         return JSONResponse({"reply": fallback})
 
     except Exception as e:
