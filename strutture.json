@@ -1,0 +1,27 @@
+[
+  {
+    "TIpo Appartamento":"B&B",
+    "Nome":"Relais dell' Ussero",
+    "Indirizzo":"Lungarno Antonio Pacinotti 26 Palazzo dell'Ussero, 56126, Pisa Italia"
+  },
+  {
+    "TIpo Appartamento":"Appartamento",
+    "Nome":"Belle Vue",
+    "Indirizzo":"Via Antonio Rosmini, 11, 56123 Pisa PI"
+  },
+  {
+    "TIpo Appartamento":"Appartamento",
+    "Nome":"Casa di Gina",
+    "Indirizzo":"Via Sant'Antonio, 12, 56125 Pisa PI"
+  },
+  {
+    "TIpo Appartamento":"Appartamento",
+    "Nome":"Casa di Monic",
+    "Indirizzo":"Via della Faggiola, 7, 56126 Pisa PI"
+  },
+  {
+    "TIpo Appartamento":"Appartamento",
+    "Nome":"Villino di Monic",
+    "Indirizzo":"Via Vincenzo Gioberti, 23, 56124 Pisa PI"
+  }
+]

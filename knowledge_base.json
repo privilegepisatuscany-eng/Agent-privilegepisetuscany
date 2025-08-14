@@ -1,0 +1,415 @@
+[
+  {
+    "Categoria":"Video ",
+    "Appartamento \/ Stanza":"Belle Vue",
+    "Ambito":"Self Check-In",
+    "Descrizione":"Video che mostra come accendere",
+    "Risposta":"https:\/\/youtube.com\/shorts\/1iqknGhIFEc?feature=share"
+  },
+  {
+    "Categoria":"Video ",
+    "Appartamento \/ Stanza":"Casa di Gina",
+    "Ambito":"Self Check-In",
+    "Descrizione":"Video che mostra come accendere",
+    "Risposta":"https:\/\/youtube.com\/shorts\/Wi-mevoKB3w?feature=share"
+  },
+  {
+    "Categoria":"Video ",
+    "Appartamento \/ Stanza":"Casa di Monic",
+    "Ambito":"Self Check-In",
+    "Descrizione":"Video che mostra come accendere",
+    "Risposta":"https:\/\/youtube.com\/shorts\/YHX-7uT3itQ?feature=share"
+  },
+  {
+    "Categoria":"Video ",
+    "Appartamento \/ Stanza":"Relais dell' Ussero",
+    "Ambito":"Self Check-In",
+    "Descrizione":"Video che mostra come accendere",
+    "Risposta":"https:\/\/youtube.com\/shorts\/XnBcl2T-ewM?feature=share"
+  },
+  {
+    "Categoria":"Video ",
+    "Appartamento \/ Stanza":"Casa di Monic",
+    "Ambito":"Salta corrente",
+    "Descrizione":"Video mostra come ripristinare la corrente",
+    "Risposta":"https:\/\/youtube.com\/shorts\/UIozKt4ZrCk?feature=share"
+  },
+  {
+    "Categoria":"Info",
+    "Appartamento \/ Stanza":"Tutti",
+    "Ambito":"Accesso e Check in",
+    "Descrizione":"Informazioni su come accedere",
+    "Risposta":"Contattare il numero di telefono +39 3518143662 oppure tramite messaggio whatsapp al +39 3336011867        "
+  },
+  {
+    "Categoria":"Info",
+    "Appartamento \/ Stanza":"Tutti",
+    "Ambito":"Accesso e Self Check in",
+    "Descrizione":"Istruzioni in caso di codice non funzionante",
+    "Risposta":"appena la vostra “struttura” ( casa o camera ) sarà disponibile  ti invierò un video dove ti fornirò tutte le informazioni necessarie al tuo self check-in."
+  },
+  {
+    "Categoria":"Info",
+    "Appartamento \/ Stanza":"Tutti",
+    "Ambito":"Accesso e Self Check in",
+    "Descrizione":"keybox è bloccata o manca la chiave",
+    "Risposta":"Contattare il numero di telefono +39 3518143662 oppure tramite messaggio whatsapp al +39 3336011867        "
+  },
+  {
+    "Categoria":"Info",
+    "Appartamento \/ Stanza":"Tutti",
+    "Ambito":"Divieti",
+    "Descrizione":"Vietato fumare",
+    "Risposta":"Assolutamente vietato fumare all’interno della casa e negli ambienti comuni."
+  },
+  {
+    "Categoria":"Info",
+    "Appartamento \/ Stanza":"Tutti",
+    "Ambito":"Divieti",
+    "Descrizione":"Cosa non gettare nel water",
+    "Risposta":"E’ vietato buttare nel water pannolini e tutto ciò che possa ostruire le tubature. Si ricorda che esistono gli appositi cestini.\n"
+  },
+  {
+    "Categoria":"Info",
+    "Appartamento \/ Stanza":"Casa di Gina",
+    "Ambito":"Divieti",
+    "Descrizione":"Policy rumore",
+    "Risposta":"Deve essere osservato il totale silenzio dalle ore 23.00 alle ore 09.00 e dalle ore 14.00 alle ore 16.00. In ogni caso deve essere mantenuto un comportamento che in nessun momento della giornata e in nessun modo danneggi l’altrui tranquillità.\n"
+  },
+  {
+    "Categoria":"Info",
+    "Appartamento \/ Stanza":"Solo Appartamenti",
+    "Ambito":"Riscaldamento",
+    "Descrizione":"Riscaldamento è regolabile? Serve termostato?",
+    "Risposta":"Il riscaldamento è centralizzato e si accenderà in automatico in determinate ore della giornata ( solo per gli appartamenti ) "
+  },
+  {
+    "Categoria":"Info",
+    "Appartamento \/ Stanza":"Belle Vue",
+    "Ambito":"Wifi",
+    "Descrizione":"Qual è il wifi e la password?",
+    "Risposta":"All’interno degli appartamenti e delle camere troverete il nome della rete wi-fi  e la password"
+  },
+  {
+    "Categoria":"Info",
+    "Appartamento \/ Stanza":"Casa di Gina",
+    "Ambito":"Wifi",
+    "Descrizione":"Qual è il wifi e la password?",
+    "Risposta":"All’interno degli appartamenti e delle camere troverete il nome della rete wi-fi  e la password"
+  },
+  {
+    "Categoria":"Info",
+    "Appartamento \/ Stanza":"Relais dell' Ussero",
+    "Ambito":"Wifi",
+    "Descrizione":"Qual è il wifi e la password?",
+    "Risposta":"All’interno degli appartamenti e delle camere troverete il nome della rete wi-fi  e la password"
+  },
+  {
+    "Categoria":"Info",
+    "Appartamento \/ Stanza":"Casa di Monic",
+    "Ambito":"Wifi",
+    "Descrizione":"Qual è il wifi e la password?",
+    "Risposta":"è posizionato sotto la scritta free wi-fi. Per usarlo devi inquadrare con la telecamera del tuo telefono il QR dietro il modem\n"
+  },
+  {
+    "Categoria":"Info",
+    "Appartamento \/ Stanza":"Casa di Monic",
+    "Ambito":"Portone",
+    "Descrizione":"Portone verde ingresso",
+    "Risposta":"all’ingresso per aprilo dovete inserire la chiave,una volta inserita, dovrete spingere energicamente per aprilo. se trovate il portone chiuso dovrete richiuderlo\n"
+  },
+  {
+    "Categoria":"Info",
+    "Appartamento \/ Stanza":"Casa di Monic",
+    "Ambito":"Salta corrente",
+    "Descrizione":"Salta la corrente",
+    "Risposta":"Se dovesse staccarsi la corrente elettrica, troverete una volta entrati in cucina sulla vostra sinistra una porta dove all’interno è posizionato il quadro elettrico."
+  },
+  {
+    "Categoria":"Info",
+    "Appartamento \/ Stanza":"Casa di Monic",
+    "Ambito":"Salta corrente",
+    "Descrizione":"Salta la corrente - quadro elettrico generale",
+    "Risposta":"Se la corrente non dovesse tornare sarà necessario controllare il quadro generale della corrente. Lo potrete trovare fuori dall’appartamento ed è posizionato accanto al portone verde all’interno delle cassette della posta, in casa troverete una chiave che vi permetterà di aprire la porta dove all’interno c’è il quadro elettrico con il nome COSCI LAURA se troverete la levetta abbassata basterà sollevare la levetta verso l’alto."
+  },
+  {
+    "Categoria":"Info",
+    "Appartamento \/ Stanza":"Casa di Monic",
+    "Ambito":"Primo soccorso",
+    "Descrizione":"Cassettina primo soccorso",
+    "Risposta":"una volta entrati in cucina sulla vostra sinistra troverete una porta dove all’interno è posizionata una cassetta di primo soccorso"
+  },
+  {
+    "Categoria":"Info",
+    "Appartamento \/ Stanza":"Tutti",
+    "Ambito":"Smaltimento spazzatura soggiorni brevi",
+    "Descrizione":"Dove buttare la spazzatura e regole per la differenziata",
+    "Risposta":"potrete lasciare la spazzatura all’interno della struttura, il nostro personale penserà allo smaltimento dei rifiuti. "
+  },
+  {
+    "Categoria":"Info",
+    "Appartamento \/ Stanza":"Tutti",
+    "Ambito":"Smaltimento spazzatura soggiorni lunghi",
+    "Descrizione":"Dove buttare la spazzatura e regole per la differenziata",
+    "Risposta":"vi sarà fornita un tessera elettronica che vi  permetterà in autonomia di buttare la spazzatura"
+  },
+  {
+    "Categoria":"Info",
+    "Appartamento \/ Stanza":"Tutti",
+    "Ambito":"Pulizia extra",
+    "Descrizione":"Quando viene fatta",
+    "Risposta":"La pulizia extra normalmente viene concordata prima del vostro arrivo a Pisa, \t\tma se durante il vostro soggiorno avrete bisogno di una pulizia extra sarà nostro \t\tinteresse concordare con voi un giorno disponibile."
+  },
+  {
+    "Categoria":"Info",
+    "Appartamento \/ Stanza":"Tutti",
+    "Ambito":"Pulizia extra",
+    "Descrizione":"Cambio biancheria",
+    "Risposta":"Nella pulizia extra è compreso il cambio biancheria e asciugamani"
+  },
+  {
+    "Categoria":"Info",
+    "Appartamento \/ Stanza":"Tutti",
+    "Ambito":"Pulizia extra",
+    "Descrizione":"Costo e modalità di richiesta",
+    "Risposta":"Il costo che vi verrà richiesto è identico a quello che avete pagato al momento della vostra prenotazione tramite Booking."
+  },
+  {
+    "Categoria":"Info",
+    "Appartamento \/ Stanza":"Tutti",
+    "Ambito":"Taxi pubblico",
+    "Descrizione":"Numero taxi pubblico ",
+    "Risposta":"+39050541600"
+  },
+  {
+    "Categoria":"Info",
+    "Appartamento \/ Stanza":"Tutti",
+    "Ambito":"Taxi privato (NCC)",
+    "Descrizione":"costo Aeroporto o Stazione ferroviaria verso la città",
+    "Risposta":40
+  },
+  {
+    "Categoria":"Info",
+    "Appartamento \/ Stanza":"Tutti",
+    "Ambito":"Taxi privato (NCC)",
+    "Descrizione":"costo Città verso aeroporto o Stazione ferroviaria",
+    "Risposta":50
+  },
+  {
+    "Categoria":"Info",
+    "Appartamento \/ Stanza":"Tutti",
+    "Ambito":"Taxi privato (NCC)",
+    "Descrizione":"Info da richiedere per prenotare",
+    "Risposta":"invio documentazione check-in,orario di arrivo, numero del volo.da specificare se c’e’ la necessita di seggiolini per bambini"
+  },
+  {
+    "Categoria":"Info",
+    "Appartamento \/ Stanza":"Tutti",
+    "Ambito":"Taxi privato (NCC)",
+    "Descrizione":"Info da richiedere per prenotare",
+    "Risposta":"Indifferente sia contanti che carta"
+  },
+  {
+    "Categoria":"Info",
+    "Appartamento \/ Stanza":"Casa di Monic",
+    "Ambito":"Parcheggio",
+    "Descrizione":"Come funziona il parcheggio",
+    "Risposta":"parcheggio pubblico Piazza Carrara o Piazza santa Caterina entrambi i parcheggi sono equidistanti dall’appartamentoa circa 400metri. Il costo è di 1,50€ l’ora."
+  },
+  {
+    "Categoria":"Info",
+    "Appartamento \/ Stanza":"Belle Vue",
+    "Ambito":"Parcheggio",
+    "Descrizione":"Come funziona il parcheggio",
+    "Risposta":"Il parcheggio si trova sotto al palazzo, in via Antonio Rosmini, oppure puoi trovare un altro parcheggio in via Pasquale Galluppi, entrambi i parcheggi sono a pagamento dalle ore 08:00 alle 14:00 dopo le ore 14:00 sono gratis. C’è anche la possibilità di un parcheggio costudito H24 in via Piave a pagamento. "
+  },
+  {
+    "Categoria":"Info",
+    "Appartamento \/ Stanza":"La Casa di Gina",
+    "Ambito":"Parcheggio",
+    "Descrizione":"Come funziona il parcheggio",
+    "Risposta":"Puoi parcheggiare la tua auto in Via Crispi o in Piazza Aurelio Saffi oppure puoi trovare posto per la tua auto sul Lungarno Sidney Sonnino il costo dei parcheggi è di 1.50€ l’ora. "
+  },
+  {
+    "Categoria":"Info",
+    "Appartamento \/ Stanza":"Il Villino di monic",
+    "Ambito":"Parcheggio",
+    "Descrizione":"Come funziona il parcheggio",
+    "Risposta":"Il parcheggio si trova di fronte alla casa in via Vincenzo Gioberti, puoi parcheggiarla sul lato destro della strada dove ci sono le strisce blu, se non ci fosse posto puoi trovare un altro parcheggio in via del Bastione, che si trova a pochi metri dalla casa, il parcheggio è a pagamento dalle ore 08:00 alle 14:00 dopo le ore 14:00 è gratis."
+  },
+  {
+    "Categoria":"Info",
+    "Appartamento \/ Stanza":"Tutti",
+    "Ambito":"Emergenze",
+    "Descrizione":"Per qualciasi cosa",
+    "Risposta":"contattare il numero di telefono +39 3518143662"
+  },
+  {
+    "Categoria":"Info",
+    "Appartamento \/ Stanza":"Belle Vue",
+    "Ambito":"Salta corrente",
+    "Descrizione":"Salta la corrente",
+    "Risposta":"Ti metto in contatto con Niccolò"
+  },
+  {
+    "Categoria":"Info",
+    "Appartamento \/ Stanza":"Casa di Gina",
+    "Ambito":"Salta corrente",
+    "Descrizione":"Salta la corrente",
+    "Risposta":"Ti metto in contatto con Niccolò"
+  },
+  {
+    "Categoria":"Info",
+    "Appartamento \/ Stanza":"Relais dell' Ussero",
+    "Ambito":"Salta corrente",
+    "Descrizione":"Salta la corrente",
+    "Risposta":"Ti metto in contatto con Niccolò"
+  },
+  {
+    "Categoria":"Info",
+    "Appartamento \/ Stanza":"Tutti",
+    "Ambito":"Chiavi",
+    "Descrizione":"Perdida chiavi",
+    "Risposta":"Ti metto in contatto con Niccolò"
+  },
+  {
+    "Categoria":"Info",
+    "Appartamento \/ Stanza":"Tutti",
+    "Ambito":"Chiavi",
+    "Descrizione":"Penale perdita chiavi",
+    "Risposta":20
+  },
+  {
+    "Categoria":"Info",
+    "Appartamento \/ Stanza":"Tutti",
+    "Ambito":"Guasti",
+    "Descrizione":"Guasti bagno, doccia cucina e altro",
+    "Risposta":"Ti metto in contatto con Niccolò"
+  },
+  {
+    "Categoria":"Info",
+    "Appartamento \/ Stanza":"Tutti",
+    "Ambito":"Check-in",
+    "Descrizione":"Orario Check in",
+    "Risposta":"Dalle 15.00 alle 4.00"
+  },
+  {
+    "Categoria":"Info",
+    "Appartamento \/ Stanza":"Tutti",
+    "Ambito":"Check-in",
+    "Descrizione":"Sono in anticipo rispetto all'orario del check-in",
+    "Risposta":"Dalle 15.00 alle 4.00"
+  },
+  {
+    "Categoria":"Info",
+    "Appartamento \/ Stanza":"Tutti",
+    "Ambito":"Check-out",
+    "Descrizione":"Orario Check-out",
+    "Risposta":" ti ricordo che il check in è alle ore 15:00. Ma farò il possibile per consegnarti il tuo alloggio  prima dell’ora del check in. Se al tuo arrivo la struttura non è ancora disponibile ti darò la possibilità di depositare i tuoi bagagli all’interno di essa, in attesa che venga pulita e sistemata per voi. Una volta che la struttura sarà disponibile per voi ti invierò tutte le istruzioni per accedervi.    "
+  },
+  {
+    "Categoria":"Info",
+    "Appartamento \/ Stanza":"Tutti",
+    "Ambito":"Late Check-out",
+    "Descrizione":"Si può posticipare il check-out",
+    "Risposta":"Chiedere a Niccoló tramite WhatsApp al numero +39 3336011867"
+  },
+  {
+    "Categoria":"Suggerimenti",
+    "Appartamento \/ Stanza":"Tutti",
+    "Ambito":"Ristoranti",
+    "Descrizione":"Ristoranti consigliati",
+    "Risposta":"Osteria dei Cavalieri \nOsteria Vasari \nRistorante la sosta dei Cavalieri \nOsteria Piave 46 ( aperto solo a pranzo) \nGourmet il mozza\nRistorante la Stanzina"
+  },
+  {
+    "Categoria":"Suggerimenti",
+    "Appartamento \/ Stanza":"Tutti",
+    "Ambito":"Bar \/ Pasticceria",
+    "Descrizione":"Bar \/ Pasticceria consigliati",
+    "Risposta":"Caffè dell’Ussero \nPasticceria dei Mille\t\t\nPasticceria Macchi\t\nPasticceria Salsa"
+  },
+  {
+    "Categoria":"Contatti",
+    "Appartamento \/ Stanza":"Tutti",
+    "Ambito":"Contatti utili",
+    "Descrizione":"Monica",
+    "Risposta":"+393518143662"
+  },
+  {
+    "Categoria":"Contatti",
+    "Appartamento \/ Stanza":"Tutti",
+    "Ambito":"Contatti utili",
+    "Descrizione":"Niccolò",
+    "Risposta":"+393336011867"
+  },
+  {
+    "Categoria":"Contatti",
+    "Appartamento \/ Stanza":"Tutti",
+    "Ambito":"Contatti utili",
+    "Descrizione":"Instagram",
+    "Risposta":"@privilege_pisa"
+  },
+  {
+    "Categoria":"Contatti",
+    "Appartamento \/ Stanza":"Tutti",
+    "Ambito":"Contatti utili",
+    "Descrizione":"Sito Internet",
+    "Risposta":"www.privilegepisatuscany.com"
+  },
+  {
+    "Categoria":"Contatti",
+    "Appartamento \/ Stanza":"Tutti",
+    "Ambito":"Contatti utili",
+    "Descrizione":"Email",
+    "Risposta":"privilegepisatuscany@gmail.com"
+  },
+  {
+    "Categoria":"Contatti",
+    "Appartamento \/ Stanza":"Tutti",
+    "Ambito":"Contatti utili",
+    "Descrizione":"Vigili del fuoco",
+    "Risposta":115
+  },
+  {
+    "Categoria":"Contatti",
+    "Appartamento \/ Stanza":"Tutti",
+    "Ambito":"Contatti utili",
+    "Descrizione":"Ambulanza",
+    "Risposta":118
+  },
+  {
+    "Categoria":"Contatti",
+    "Appartamento \/ Stanza":"Tutti",
+    "Ambito":"Contatti utili",
+    "Descrizione":"Polizia",
+    "Risposta":113
+  },
+  {
+    "Categoria":"Info",
+    "Appartamento \/ Stanza":"La Casa di Monic",
+    "Ambito":"Ferro da stiro",
+    "Descrizione":"C'è il ferro da stiro?",
+    "Risposta":"Si , all’interno della casa troverai tutto l’occorrente"
+  },
+  {
+    "Categoria":"Info",
+    "Appartamento \/ Stanza":"Il Villino di monic",
+    "Ambito":"Ferro da stiro",
+    "Descrizione":"C'è il ferro da stiro?",
+    "Risposta":"Si , all’interno della casa troverai tutto l’occorrente"
+  },
+  {
+    "Categoria":"Info",
+    "Appartamento \/ Stanza":"Relais dell' Ussero",
+    "Ambito":"Ferro da stiro",
+    "Descrizione":"C'è il ferro da stiro?",
+    "Risposta":"No, mi dispiace non offriamo questo servizio"
+  },
+  {
+    "Categoria":"Info",
+    "Appartamento \/ Stanza":"Relais dell' Ussero",
+    "Ambito":"Colazione",
+    "Descrizione":"Come funziona la colazione",
+    "Risposta":"la colazione verrà servita dal martedì alla domenica dalle ore 07:00 alle 12:00  piano terra de palazzo al caffè dell’ussero, invece solo il lunedì sempre dalle ore 07:00 alle 12:00 alla pasticceria Macchi. \nAll’interno della sua camera troverà dei ticket validi per la sua colazione. "
+  }
+]
