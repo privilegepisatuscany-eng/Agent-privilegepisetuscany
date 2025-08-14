@@ -17,6 +17,8 @@ with open("knowledge_base.json") as f:
 with open("strutture.json") as f:
     anagrafica = pd.DataFrame(json.load(f))
 
+print("[ANAGRAFICA COLONNE]:", list(anagrafica.columns))
+
 app = FastAPI()
 
 CIAOBOOKING_API_BASE = "https://api.ciaobooking.com/api/public"
@@ -26,7 +28,12 @@ OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 REDIS_URL = os.getenv("REDIS_URL", "redis://localhost:6379")
 
 openai.api_key = OPENAI_API_KEY
-rdb = redis.Redis.from_url(REDIS_URL, decode_responses=True, ssl="upstash.io" in REDIS_URL)
+import urllib.parse
+
+parsed = urllib.parse.urlparse(REDIS_URL)
+use_ssl = "upstash.io" in parsed.hostname if parsed.hostname else False
+rdb = redis.Redis.from_url(REDIS_URL, decode_responses=True, ssl=use_ssl)
+
 
 AGENT_PROMPT = """
 Sei un assistente virtuale altamente qualificato che lavora per una struttura alberghiera di lusso. [...] Se non comprendi esattamente la richiesta, fai domande di chiarimento in modo gentile.
@@ -69,7 +76,9 @@ def extract_property_context(reservations):
     return latest["property"]["name"]
 
 def get_struttura_info(property_name: str):
-    col_name = next(c for c in anagrafica.columns if "appartamento" in c.lower() and "stanza" in c.lower())
+col_name = next((c for c in anagrafica.columns if "appartamento" in c.lower() and "stanza" in c.lower()), None)
+if not col_name:
+    raise ValueError("Colonna 'Appartamento /stanza' non trovata nella tabella anagrafica.")    
     match = anagrafica[anagrafica[col_name] == property_name]
     return match.iloc[0].to_dict() if not match.empty else {}
 
