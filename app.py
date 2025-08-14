@@ -9,6 +9,7 @@ import os
 import json
 import redis
 from datetime import datetime
+import traceback
 
 kb = pd.read_excel("Knowledge base.xlsx", sheet_name="Knowledge base")
 anagrafica = pd.read_excel("Knowledge base.xlsx", sheet_name="Strutture")
@@ -93,10 +94,10 @@ def save_session(phone: str, session: dict):
 @app.get("/", response_class=HTMLResponse)
 async def whatsapp_style():
     return """
-    <html><head><title>Test Chat</title>
+    <html><head><title>Chat WhatsApp</title>
     <style>
     body { font-family: sans-serif; background: #e5ddd5; padding: 20px; }
-    .chat { max-width: 500px; margin: auto; background: #fff; border-radius: 10px; padding: 10px; }
+    .chat { max-width: 500px; margin: auto; background: #fff; border-radius: 10px; padding: 10px; display: flex; flex-direction: column; gap: 8px; }
     .msg { margin: 5px 0; padding: 8px 12px; border-radius: 10px; max-width: 70%; }
     .user { background: #dcf8c6; align-self: flex-end; text-align: right; }
     .bot { background: #f1f0f0; align-self: flex-start; text-align: left; }
@@ -116,11 +117,22 @@ async def whatsapp_style():
 async def test_form(phone: str = Form(...), message: str = Form(...)):
     response = await handle_message(IncomingMessage(phone=phone, message=message))
     reply = response.body.decode() if hasattr(response, 'body') else response
+    history = get_session(phone)["messages"]
+
+    bubbles = "".join([
+        f"<div class='bubble user'><div class='msg user'>{m[0]}</div></div>" +
+        f"<div class='bubble bot'><div class='msg bot'>{m[1]}</div></div>"
+        for m in history
+    ])
     return HTMLResponse(content=f"""
         <html><body><div class='chat'>
-        <div class='bubble user'><div class='msg user'>{message}</div></div>
-        <div class='bubble bot'><div class='msg bot'>{json.loads(reply)['reply']}</div></div>
-        <a href='/'>↩️ Torna indietro</a></div></body></html>
+        {bubbles}
+        <form method='post' action='/test'>
+        <input type='hidden' name='phone' value='{phone}' />
+        <div><label>Messaggio:</label><input name='message' /></div>
+        <button>Invia</button>
+        </form>
+        <a href='/'>↩️ Nuova sessione</a></div></body></html>
     """)
 
 @app.post("/webhook")
@@ -158,6 +170,8 @@ async def handle_message(msg: IncomingMessage):
         return JSONResponse({"reply": fallback})
 
     except Exception as e:
+        print("ERRORE:", e)
+        traceback.print_exc()
         return JSONResponse({"reply": "Si è verificato un errore nel sistema. Stiamo verificando. Nel frattempo, Niccolò la contatterà."})
 
 @app.get("/sessioni")
@@ -170,3 +184,11 @@ def list_sessions():
 def flush_sessions():
     rdb.flushdb()
     return {"status": "tutte le sessioni sono state cancellate."}
+
+@app.get("/pingciao")
+def ping_ciao():
+    try:
+        token = get_bearer_token()
+        return {"token": token[:5] + "..."}
+    except Exception as e:
+        return {"error": str(e)}
