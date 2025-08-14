@@ -1,7 +1,6 @@
 # app.py
 from fastapi import FastAPI, Request, Form
 from fastapi.responses import JSONResponse, HTMLResponse
-from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 import openai
 import pandas as pd
@@ -11,12 +10,12 @@ import json
 import redis
 from datetime import datetime
 
-# Load Knowledge Base
+# Load Knowledge Base and Anagrafica
 kb = pd.read_excel("Knowledge base.xlsx", sheet_name="Knowledge base")
 anagrafica = pd.read_excel("Knowledge base.xlsx", sheet_name="Strutture")
 
 app = FastAPI()
-app.mount("/static", StaticFiles(directory="static"), name="static")
+# app.mount("/static", StaticFiles(directory="static"), name="static")
 
 # Configuration
 CIAOBOOKING_API_BASE = "https://api.ciaobooking.com/api/public"
@@ -71,6 +70,10 @@ def extract_property_context(reservations):
         return None
     latest = sorted(reservations, key=lambda x: x["start_date"], reverse=True)[0]
     return latest["property"]["name"]
+
+def get_struttura_info(property_name: str):
+    match = anagrafica[anagrafica["Appartamento /stanza"] == property_name]
+    return match.iloc[0].to_dict() if not match.empty else {}
 
 def query_kb(property_name: str, message: str):
     filtered_kb = kb[kb["Appartamento /stanza"].str.contains(property_name, na=False)]
@@ -127,6 +130,7 @@ async def handle_message(msg: IncomingMessage):
         if not property_name:
             return JSONResponse({"reply": "Gentile ospite, non riesco a trovare una prenotazione attiva. Niccolò la ricontatterà al più presto."})
 
+        struttura = get_struttura_info(property_name)
         session = get_session(msg.phone)
 
         response = query_kb(property_name, msg.message)
@@ -135,7 +139,12 @@ async def handle_message(msg: IncomingMessage):
             save_session(msg.phone, session)
             return JSONResponse({"reply": response})
 
-        enriched_prompt = f"Domanda del cliente: '{msg.message}'\nStruttura: {property_name}."
+        # Fallback GPT enriched with struttura info
+        extra_info = ""
+        if struttura:
+            extra_info = f"\nNome struttura: {struttura.get('Struttura')}\nTipo: {struttura.get('Tipo struttura')}\nIndirizzo: {struttura.get('Indirizzo')}\nComune: {struttura.get('Comune')}"
+
+        enriched_prompt = f"Domanda del cliente: '{msg.message}'\nStruttura: {property_name}.{extra_info}"
         fallback = ask_gpt(enriched_prompt)
         session["messages"].append((msg.message, fallback))
         save_session(msg.phone, session)
@@ -143,3 +152,15 @@ async def handle_message(msg: IncomingMessage):
 
     except Exception as e:
         return JSONResponse({"reply": "Si è verificato un errore nel sistema. Stiamo verificando. Nel frattempo, Niccolò la contatterà."})
+
+# Debug endpoints
+@app.get("/sessioni")
+def list_sessions():
+    keys = rdb.keys()
+    output = {k: json.loads(rdb.get(k)) for k in keys}
+    return output
+
+@app.get("/flush")
+def flush_sessions():
+    rdb.flushdb()
+    return {"status": "tutte le sessioni sono state cancellate."}
