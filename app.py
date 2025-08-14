@@ -70,7 +70,7 @@ def extract_property_context(reservations):
 
 def get_struttura_info(property_name: str):
     col_name = next(c for c in anagrafica.columns if "appartamento" in c.lower() and "stanza" in c.lower())
-match = anagrafica[anagrafica[col_name] == property_name]
+    match = anagrafica[anagrafica[col_name] == property_name]
     return match.iloc[0].to_dict() if not match.empty else {}
 
 def query_kb(property_name: str, message: str):
