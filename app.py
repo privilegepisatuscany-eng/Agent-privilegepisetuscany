@@ -1,43 +1,54 @@
+import os
+import json
+import traceback
+import redis
+import pandas as pd
 from fastapi import FastAPI, Form
 from fastapi.responses import HTMLResponse, JSONResponse
-import pandas as pd
-import json
-import redis
+from pydantic import BaseModel
 
-app = FastAPI()
+# Variabili ambiente
+REDIS_URL = os.getenv("REDIS_URL", "redis://localhost:6379")
+PORT = int(os.environ.get("PORT", 10000))
 
-# Redis setup
-REDIS_URL = "redis://localhost:6379/0"
-rdb = redis.from_url(REDIS_URL)
+# Redis o fallback in memoria
+try:
+    rdb = redis.Redis.from_url(REDIS_URL, decode_responses=True, ssl="upstash.io" in REDIS_URL)
+    rdb.ping()
+    print("✅ Redis connesso con successo")
+except Exception as e:
+    print("⚠️ Redis non disponibile, uso fallback in memoria")
+    rdb = None
+    memory_db = {}
 
-# Load JSON data
+def get_session(phone):
+    if rdb:
+        raw = rdb.get(phone)
+        return json.loads(raw) if raw else {"messages": []}
+    return memory_db.get(phone, {"messages": []})
+
+def save_session(phone, session):
+    if rdb:
+        rdb.set(phone, json.dumps(session))
+    else:
+        memory_db[phone] = session
+
+# Modelli
+class IncomingMessage(BaseModel):
+    phone: str
+    message: str
+
+# Dati KB
 with open("knowledge_base.json") as f:
     kb = pd.DataFrame(json.load(f))
 
 with open("strutture.json") as f:
     anagrafica = pd.DataFrame(json.load(f))
 
-def get_session(phone: str):
-    raw = rdb.get(phone)
-    if raw:
-        return json.loads(raw)
-    return {"messages": []}
+print("[ANAGRAFICA COLONNE]:", list(anagrafica.columns))
 
-def save_session(phone: str, session_data):
-    rdb.set(phone, json.dumps(session_data))
-
-def query_kb(property_name: str, message: str) -> str:
-    df = kb[kb["nome_struttura"].str.lower() == property_name.lower()]
-    if df.empty:
-        return "Non ho trovato informazioni su questa struttura."
-
-    for _, row in df.iterrows():
-        if "Testo FAQ" in row:
-            testo = str(row["Testo FAQ"]).lower()
-            if testo in message.lower():
-                return str(row.get("risposta", ""))
-
-    return "Mi dispiace, non ho trovato una risposta precisa alla tua domanda."
+# FastAPI
+app = FastAPI()
 
 @app.get("/", response_class=HTMLResponse)
 async def whatsapp_style():
@@ -61,19 +72,18 @@ async def whatsapp_style():
     </div></body></html>
     """
 
-@app.post("/test", response_class=HTMLResponse)
+@app.post("/test")
 async def test_form(phone: str = Form(...), message: str = Form(...)):
+    msg = IncomingMessage(phone=phone, message=message)
+    reply = await handle_message(msg)
     session = get_session(phone)
-    response = query_kb("nome_struttura_example", message)
-    session["messages"].append((message, response))
+    session["messages"].append((message, reply["reply"]))
     save_session(phone, session)
-
     bubbles = "".join([
         f"<div class='bubble user'><div class='msg user'>{m[0]}</div></div>" +
         f"<div class='bubble bot'><div class='msg bot'>{m[1]}</div></div>"
         for m in session["messages"]
     ])
-
     return HTMLResponse(content=f"""
         <html><body><div class='chat'>
         {bubbles}
@@ -84,3 +94,39 @@ async def test_form(phone: str = Form(...), message: str = Form(...)):
         </form>
         <a href='/'>↩️ Nuova sessione</a></div></body></html>
     """)
+
+@app.post("/webhook")
+async def handle_message(msg: IncomingMessage):
+    try:
+        # Dummy property context
+        property_name = "Privilege Pisa Tuscany"
+        session = get_session(msg.phone)
+
+        risposta = query_kb(property_name, msg.message)
+        if risposta:
+            session["messages"].append((msg.message, risposta))
+            save_session(msg.phone, session)
+            return JSONResponse({"reply": risposta})
+
+        # Fallback
+        fallback = f"Non ho trovato una risposta precisa. Ti risponderà Niccolò."
+        session["messages"].append((msg.message, fallback))
+        save_session(msg.phone, session)
+        return JSONResponse({"reply": fallback})
+
+    except Exception as e:
+        print("ERRORE:", e)
+        traceback.print_exc()
+        return JSONResponse({"reply": "Errore interno. Niccolò la contatterà."})
+
+def query_kb(property_name, message):
+    df = kb[kb["nome_struttura"].str.lower() == property_name.lower()]
+    for _, row in df.iterrows():
+        testo = str(row.get("Testo FAQ", ""))
+        if testo and testo.lower() in message.lower():
+            return row.get("risposta", "")
+    return None
+
+@app.get("/ping")
+def ping():
+    return {"status": "ok"}
