@@ -1,0 +1,14 @@
+services:
+  - type: web
+    name: bnb-agent
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app:app --host 0.0.0.0 --port 10000
+    plan: free
+    envVars:
+      - key: CIAOBOOKING_EMAIL
+        value: your@email.com
+      - key: CIAOBOOKING_PASSWORD
+        value: your_password
+      - key: OPENAI_API_KEY
+        value: sk-xxxxxxxx
