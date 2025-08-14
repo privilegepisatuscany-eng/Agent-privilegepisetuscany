@@ -85,15 +85,18 @@ def get_struttura_info(property_name: str):
     match = anagrafica[anagrafica[col_name] == property_name]
     return match.iloc[0].to_dict() if not match.empty else {}
 
-def query_kb(property_name: str, message: str) -> str | None:
-    filtered_kb = kb[kb["Appartamento /stanza"].str.contains(property_name, na=False)]
+def query_kb(property_name: str, message: str) -> str:
+    df = kb[kb["nome_struttura"].str.lower() == property_name.lower()]
+    if df.empty:
+        return "Non ho trovato informazioni su questa struttura."
 
-    for _, row in filtered_kb.iterrows():
-        testo_faq = str(row.get("risposta", "")).lower()
-        if testo_faq and testo_faq in message.lower():
-            return str(row.get("risposta", ""))
-
-    return None
+    for _, row in df.iterrows():
+        if "Testo FAQ" in row:
+            testo = str(row["Testo FAQ"]).lower()
+            if testo in message.lower():
+                return str(row.get("risposta", ""))
+    
+    return "Mi dispiace, non ho trovato una risposta precisa alla tua domanda."
 
 def ask_gpt(prompt: str):
     completion = openai.ChatCompletion.create(
