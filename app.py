@@ -10,14 +10,11 @@ import json
 import redis
 from datetime import datetime
 
-# Load Knowledge Base and Anagrafica
 kb = pd.read_excel("Knowledge base.xlsx", sheet_name="Knowledge base")
 anagrafica = pd.read_excel("Knowledge base.xlsx", sheet_name="Strutture")
 
 app = FastAPI()
-# app.mount("/static", StaticFiles(directory="static"), name="static")
 
-# Configuration
 CIAOBOOKING_API_BASE = "https://api.ciaobooking.com/api/public"
 CIAOBOOKING_EMAIL = os.getenv("CIAOBOOKING_EMAIL")
 CIAOBOOKING_PASSWORD = os.getenv("CIAOBOOKING_PASSWORD")
@@ -27,17 +24,13 @@ REDIS_URL = os.getenv("REDIS_URL", "redis://localhost:6379")
 openai.api_key = OPENAI_API_KEY
 rdb = redis.Redis.from_url(REDIS_URL, decode_responses=True)
 
-# Prompt template
 AGENT_PROMPT = """
 Sei un assistente virtuale altamente qualificato che lavora per una struttura alberghiera di lusso. [...] Se non comprendi esattamente la richiesta, fai domande di chiarimento in modo gentile.
 """
 
-# Models
 class IncomingMessage(BaseModel):
     phone: str
     message: str
-
-# Utils
 
 def get_bearer_token():
     res = requests.post(
@@ -97,23 +90,38 @@ def save_session(phone: str, session: dict):
     session["last_seen"] = datetime.now().isoformat()
     rdb.set(phone, json.dumps(session))
 
-# Web UI for testing
 @app.get("/", response_class=HTMLResponse)
-async def form():
+async def whatsapp_style():
     return """
-    <html><body>
-    <h2>Simula Messaggio Cliente</h2>
-    <form action="/test" method="post">
-        Telefono: <input type="text" name="phone"><br>
-        Messaggio: <input type="text" name="message"><br>
-        <input type="submit">
-    </form>
-    </body></html>
+    <html><head><title>Test Chat</title>
+    <style>
+    body { font-family: sans-serif; background: #e5ddd5; padding: 20px; }
+    .chat { max-width: 500px; margin: auto; background: #fff; border-radius: 10px; padding: 10px; }
+    .msg { margin: 5px 0; padding: 8px 12px; border-radius: 10px; max-width: 70%; }
+    .user { background: #dcf8c6; align-self: flex-end; text-align: right; }
+    .bot { background: #f1f0f0; align-self: flex-start; text-align: left; }
+    .bubble { display: flex; flex-direction: column; }
+    </style></head><body>
+    <div class='chat'>
+      <h3>Simula una chat WhatsApp</h3>
+      <form method='post' action='/test'>
+        <div><label>Telefono:</label><input name='phone' /></div>
+        <div><label>Messaggio:</label><input name='message' /></div>
+        <button>Invia</button>
+      </form>
+    </div></body></html>
     """
 
 @app.post("/test")
 async def test_form(phone: str = Form(...), message: str = Form(...)):
-    return await handle_message(IncomingMessage(phone=phone, message=message))
+    response = await handle_message(IncomingMessage(phone=phone, message=message))
+    reply = response.body.decode() if hasattr(response, 'body') else response
+    return HTMLResponse(content=f"""
+        <html><body><div class='chat'>
+        <div class='bubble user'><div class='msg user'>{message}</div></div>
+        <div class='bubble bot'><div class='msg bot'>{json.loads(reply)['reply']}</div></div>
+        <a href='/'>↩️ Torna indietro</a></div></body></html>
+    """)
 
 @app.post("/webhook")
 async def handle_message(msg: IncomingMessage):
@@ -139,7 +147,6 @@ async def handle_message(msg: IncomingMessage):
             save_session(msg.phone, session)
             return JSONResponse({"reply": response})
 
-        # Fallback GPT enriched with struttura info
         extra_info = ""
         if struttura:
             extra_info = f"\nNome struttura: {struttura.get('Struttura')}\nTipo: {struttura.get('Tipo struttura')}\nIndirizzo: {struttura.get('Indirizzo')}\nComune: {struttura.get('Comune')}"
@@ -153,7 +160,6 @@ async def handle_message(msg: IncomingMessage):
     except Exception as e:
         return JSONResponse({"reply": "Si è verificato un errore nel sistema. Stiamo verificando. Nel frattempo, Niccolò la contatterà."})
 
-# Debug endpoints
 @app.get("/sessioni")
 def list_sessions():
     keys = rdb.keys()
