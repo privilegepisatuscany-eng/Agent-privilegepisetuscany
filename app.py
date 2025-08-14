@@ -12,7 +12,8 @@ import redis
 from datetime import datetime
 
 # Load Knowledge Base
-kb = pd.read_excel("Knowledge base.xlsx", sheet_name="KB")
+kb = pd.read_excel("Knowledge base.xlsx", sheet_name="Knowledge base")
+anagrafica = pd.read_excel("Knowledge base.xlsx", sheet_name="Strutture")
 
 app = FastAPI()
 app.mount("/static", StaticFiles(directory="static"), name="static")
